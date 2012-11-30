@@ -1,7 +1,7 @@
 PACKAGE := $(shell basename *.spec .spec)
 ARCH = noarch
 RPMBUILD = rpmbuild --define "_topdir %(pwd)/build" \
-	--define "_sourcedir  %{_topdir}/sdist" \
+	--define "_sourcedir  %(pwd)/sdist" \
 	--define "_builddir %{_topdir}/rpm-build" \
 	--define "_srcrpmdir %{_rpmdir}" \
 	--define "_rpmdir %{_topdir}/rpms"

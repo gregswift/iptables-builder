@@ -21,7 +21,7 @@ ordered files from a directory and compile the system's iptables configuration
 from them.
 
 %prep
-%setup -q
+%setup -q -n %{name}
 
 %build
 %{__python} setup.py build
