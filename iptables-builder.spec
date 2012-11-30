@@ -30,10 +30,10 @@ from them.
 
 %files
 %defattr (0644,root,root)
-%config %{_sysconfdir}/${name}/config
+%config %{_sysconfdir}/%{name}/config
 %dir %{_sysconfdir}/%{name}/available.d
 %dir %{_sysconfdir}/%{name}/enabled.d
-%attr(0750,-,-) %{_bindir}/${name}
+%attr(0750,-,-) %{_bindir}/%{name}
 %doc README CHANGELOG INSTALL LICENSE
 
 %changelog
