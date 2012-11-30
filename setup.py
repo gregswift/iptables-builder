@@ -23,7 +23,7 @@ if __name__ == "__main__":
                 url = "https://github.comf/gregswift/%s" % NAME,
                 license = "GPLv3",
                 scripts = ["scripts/%s" % NAME],
-                data_files = [("etc/%s" % NAME,  ["config/%s.conf" % NAME]),
+                data_files = [("etc/%s" % NAME,  ["config"]),
                               ("etc/%s/available.d" % NAME, []),
                               ("etc/%s/enabled.d" % NAME, [])],
                 description = SHORT_DESC,
