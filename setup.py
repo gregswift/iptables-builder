@@ -25,7 +25,9 @@ if __name__ == "__main__":
                 scripts = ["scripts/%s" % NAME],
                 package_dir = {NAME: NAME},
                 packages = [NAME],
-                data_files = [('etc',  ["%s.conf" % NAME])],
+                data_files = [("etc/%s" % NAME,  ["config"]),
+                              ("etc/%s/available.d" % NAME, []),
+                              ("etc/%s/enabled.d" % NAME, [])],
                 description = SHORT_DESC,
                 long_description = LONG_DESC
         )

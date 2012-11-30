@@ -8,13 +8,13 @@ try:
 except:
     import ConfigParser as configparser
 
-CONFIG = '/etc/iptables-builder.conf'
 DEFAULTS = {
     'output': '/etc/sysconfig/iptables',
-    'basepath': '/etc/iptables-rules/'
+    'basepath': '/etc/iptables-builder/'
 }
 DEFAULTS['availablepath'] = os.path.join(DEFAULTS['basepath'], 'available.d/')
 DEFAULTS['enabledpath'] = os.path.join(DEFAULTS['basepath'], 'enabled.d/')
+CONFIG = os.path.join(DEFAULTS['basepath'],'config')
 
 def gatherRulesFromSourceDir(directory):
     rules = {}
