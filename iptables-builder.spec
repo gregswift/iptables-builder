@@ -5,6 +5,7 @@ Version:   0.1
 Release:   1
 BuildArch: noarch
 Summary:   Simple wrapper script that helps generate iptables configuration
+Group:     Applications/System
 License:   GPLv3+
 URL:       http://github.com/gregswift/%{name}
 Source0:   %{name}.tgz
