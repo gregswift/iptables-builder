@@ -25,7 +25,7 @@ from them.
 %build
 
 %install
-make install --prefix=%{buildroot}
+make DESTDIR=%{buildroot} install
 
 %files
 %defattr (0644,root,root)

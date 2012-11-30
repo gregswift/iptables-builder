@@ -13,9 +13,9 @@ clean:
 	rm -rf build/ sdist/ *~
 
 install: 
-	mkdir -p ${prefix}/etc/${PACKAGE}/{available,enabled}.d
-	install -m 755 ${PACKAGE} ${prefix}/usr/bin/${PACKAGE}
-	install -m 644 config ${prefix}/etc/${PACKAGE}/config
+	mkdir -p ${DESTDIR}/etc/${PACKAGE}/{available,enabled}.d
+	install -m 755 ${PACKAGE} ${DESTDIR}/usr/bin/${PACKAGE}
+	install -m 644 config ${DESTDIR}/etc/${PACKAGE}/config
 
 install_rpms: rpms 
 	rpm -Uvh build/rpms/noarch/${PACKAGE}*.noarch.rpm
@@ -23,8 +23,8 @@ install_rpms: rpms
 reinstall: uninstall install
 
 uninstall: clean
-	rm -rf ${prefix}/etc/${PACKAGE}
-	rm -f ${prefix}/usr/bin/${PACKAGE}
+	rm -rf ${DESTDIR}/etc/${PACKAGE}
+	rm -f ${DESTDIR}/usr/bin/${PACKAGE}
 
 uninstall_rpms: clean
 	rpm -e ${PACKAGE}
