@@ -41,7 +41,6 @@ sdist: clean
 prep_rpmbuild: sdist
 	mkdir -p build/rpm-build
 	mkdir -p build/rpms
-	mv sdist/${PACKAGE}.tgz build/rpm-build/
 
 rpms: prep_rpmbuild
 	${RPMBUILD} -ba ${PACKAGE}.spec
