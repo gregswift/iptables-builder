@@ -24,10 +24,9 @@ from them.
 %setup -q -n %{name}
 
 %build
-%{__python} setup.py build
 
 %install
-%{__python} setup.py install --root=%{buildroot}  --record=INSTALLED_FILES
+%{__python} setup.py install --prefix=%{buildroot}  --record=INSTALLED_FILES
 
 %files
 %defattr (0644,root,root)
