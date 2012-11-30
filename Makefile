@@ -9,7 +9,7 @@ RPMBUILD = rpmbuild --define "_topdir %(pwd)/build" \
 all: rpms
 
 clean:
-	rm -rf build/ *~
+	rm -rf build/ sdist/ *~
 
 install: 
 	python setup.py --root=${prefix} -f
