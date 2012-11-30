@@ -27,7 +27,7 @@ mkdir -p {%buildroot}%{_bindir}
 mkdir -p {%buildroot}%{_sysconfdir}
 
 %install
-make DESTDIR=%{buildroot} sysconfdir=%{_sysconfdir} exec_prefix=%{_bindir} install
+make DESTDIR=%{buildroot} sysconfdir=%{_sysconfdir} exec_prefix=%{exec_prefix} install
 
 %files
 %defattr (0644,root,root)
