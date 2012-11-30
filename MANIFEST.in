@@ -1,6 +1,0 @@
-recursive-include scripts *
-include config
-include INSTALL
-include LICENSE
-include README
-include CHANGELOG

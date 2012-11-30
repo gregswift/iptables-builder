@@ -18,8 +18,8 @@ Installation
 1: copy included iptables-builder script to '/usr/local/bin'
 2: chmod +x /usr/local/bin/keploy
 
-### Python setup tools
-1: python setup.py install
+### Make script
+1: make install
 
 How to report bugs
 ===============

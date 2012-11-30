@@ -11,7 +11,6 @@ URL:       http://github.com/gregswift/%{name}
 Source0:   %{name}.tgz
 
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
-BuildRequires:  python-setuptools
 
 Requires:  iptables
 
@@ -26,7 +25,7 @@ from them.
 %build
 
 %install
-%{__python} setup.py install --prefix=%{buildroot}  --record=INSTALLED_FILES
+make install --prefix=%{buildroot}
 
 %files
 %defattr (0644,root,root)

@@ -13,7 +13,9 @@ clean:
 	rm -rf build/ sdist/ *~
 
 install: 
-	python setup.py --root=${prefix} -f
+	mkdir -p ${prefix}/etc/${PACKAGE}/{available,enabled}.d
+	install -m 755 ${PACKAGE} ${prefix}/usr/bin/${PACKAGE}
+	install -m 644 config ${prefix}/etc/${PACKAGE}/config
 
 install_rpms: rpms 
 	rpm -Uvh build/rpms/noarch/${PACKAGE}*.noarch.rpm
@@ -28,7 +30,7 @@ uninstall_rpms: clean
 	rpm -e ${PACKAGE}
 
 sdist: clean
-	mkdir -p sdist/i
+	mkdir -p sdist/
 	ln -s . ${PACKAGE}
 	tar -czPhf sdist/${PACKAGE}.tgz \
 	  --exclude ".git" --exclude ".gitignore" \
@@ -39,7 +41,7 @@ sdist: clean
 prep_rpmbuild: sdist
 	mkdir -p build/rpm-build
 	mkdir -p build/rpms
-	cp sdist/${PACKAGE}.tgz build/rpm-build/
+	mv sdist/${PACKAGE}.tgz build/rpm-build/
 
 rpms: prep_rpmbuild
 	${RPMBUILD} -ba ${PACKAGE}.spec
