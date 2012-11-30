@@ -30,7 +30,7 @@ uninstall_rpms: clean
 sdist: clean
 	mkdir -p sdist/i
 	ln -s . ${PACKAGE}
-	tar -czfP sdist/${PACKAGE}.tgz \
+	tar -czPhf sdist/${PACKAGE}.tgz \
 	  --exclude ".git" --exclude ".gitignore" \
 	  --exclude "sdist" --exclude "build" \
 	  --exclude ${PACKAGE}/${PACKAGE} \
