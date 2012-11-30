@@ -9,8 +9,11 @@ except:
     import ConfigParser as configparser
 
 DEFAULTS = {
-    'output': '/etc/sysconfig/iptables',
-    'basepath': '/etc/iptables-builder/'
+    'data'    : '/etc/sysconfig/iptables',
+    'basepath': '/etc/iptables-builder/',
+    'intput'  : 'INPUT',
+    'output'  : 'OUTPUT',
+    'forward' : 'FORWARD',
 }
 DEFAULTS['availablepath'] = os.path.join(DEFAULTS['basepath'], 'available.d/')
 DEFAULTS['enabledpath'] = os.path.join(DEFAULTS['basepath'], 'enabled.d/')
@@ -23,23 +26,32 @@ def gatherRulesFromSourceDir(directory):
         rules[rule] = (x.strip() for x in open(rule,'r').readlines())
     return rules
 
-def compileRules(rules):
+def compileRules(rules, chains):
     order = rules.keys()
     order.sort()
     output = []
     for ruleset in order:
         for rule in rules[ruleset]:
+            rule = rule.split(' ')
+            try:
+                rule[1] = chains[rule[1]]
+            except:
+                raise Exception, 'Unknown chain in ruleset %s' % ruleset
             output.append(rule)
     return "\n".join(output)
 
 def saveRules(target, rules):
     open(target, 'w').write(rules)
 
-def main(target, rulesdir, raw):
+def main(target, paths, chains, raw):
     try:
-        rules = compileRules(gatherRulesFromSourceDir(rulesdir))
+        gathered = gatherRulesFromSourceDir(paths['enabled'])
     except OSError, e:
         errorOut('Unable to access source rules', 255)
+    try:
+        rules = compileRules(rules, chains)
+    except Exception, e:
+        errorOut(e, 128)
     if raw:
         print rules
     else:
@@ -56,17 +68,22 @@ def errorOut(msg, code):
 def getConfig(source, defaults):
     config = configparser.SafeConfigParser(defaults)
     config.read(source)
-    output = config.get('main','output')
-    basepath = config.get('sources','basepath')
-    enabledpath = config.get('sources','enabledpath')
-    availablepath = config.get('sources','availablepath')
-    return (output, basepath, enabledpath, availablepath)
+    data = config.get('main','data')
+    paths = {}
+    paths['base'] = config.get('sources','basepath')
+    paths['enabled'] = config.get('sources','enabledpath')
+    paths['available'] = config.get('sources','availablepath')
+    chains = {}
+    chains['input'] = config.get('chains', 'input').upper()
+    chains['output'] = config.get('chains', 'output').upper()
+    chains['forward'] = config.get('chains', 'forward').upper()
+    return (output, paths, chains)
 
 if __name__ == '__main__':
     parser = OptionParser(usage='Usage: %s [-o filename|--raw]')
     parser.add_option('-c', '--config', action="store", default=CONFIG,
             help='Specify alternative configuration file'),
-    parser.add_option('-o', '--output', action="store", default=None,
+    parser.add_option('-o', '--output-file', action="store", default=None,
             help='Specify alternative output location'),
     parser.add_option('-r', '--rules-dir', action="store", default=None,
             help='Specify alternative output location'),
@@ -74,14 +91,19 @@ if __name__ == '__main__':
             help='Print output rather than save it to output file'),
     options, args = parser.parse_args()
     try:
-        (output, basepath, enabledpath, availablepath) = getConfig(options.config, DEFAULTS)
+        (target, paths, chains) = getConfig(options.config, DEFAULTS)
     except configparser.Error:
-        output = DEFAULTS['output']
-        basepath = DEFAULTS['basepath']
-        enabledpath = DEFAULTS['enabledpath']
-        availablepath = DEFAULTS['availablepath']
-    if options.output is not None:
-        output = options.output
+        target = DEFAULTS['output']
+        paths = {}
+        paths['base'] = DEFAULTS['basepath']
+        paths['enabled'] = DEFAULTS['enabledpath']
+        paths['available'] = DEFAULTS['availablepath']
+        chains = {}
+        chains['input'] = DEFAULTS['input'].upper()
+        chains['output'] = DEFAULTS['output'].upper()
+        chains['forward'] = DEFAULTS['forward'].upper()
+    if options.output_file is not None:
+        output = options.output_file
     if options.rules_dir is not None:
-        enabledpath = options.rules_dir
-    main(output, enabledpath, options.raw)
+        paths['enabled'] = options.rules_dir
+    main(output, paths, chains, options.raw)
