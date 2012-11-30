@@ -9,6 +9,7 @@ RPMBUILD = rpmbuild --define "_topdir %(pwd)/build" \
 all: rpms
 
 clean:
+	rm -rf ${PACKAGE}
 	rm -rf build/ sdist/ *~
 
 install: 
@@ -26,13 +27,14 @@ uninstall: clean
 uninstall_rpms: clean
 	rpm -e ${PACKAGE}
 
-sdist:
-	mkdir -p sdist/${PACKAGE}
+sdist: clean
+	mkdir -p sdist/i
+	ln -s . ${PACKAGE}
 	tar -czfP sdist/${PACKAGE}.tgz \
-	  --transform="s/^/${PACKAGE}/" \
 	  --exclude ".git" --exclude ".gitignore" \
 	  --exclude "sdist" --exclude "build" \
-	  ./
+	  --exclude ${PACKAGE}/${PACKAGE} \
+	  ${PACKAGE}
 
 prep_rpmbuild: sdist
 	mkdir -p build/rpm-build
