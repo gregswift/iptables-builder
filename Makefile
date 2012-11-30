@@ -29,9 +29,8 @@ uninstall_rpms: clean
 sdist:
 	mkdir -p sdist/
 	tar -czf sdist/${PACKAGE}.tgz \
-	  --exclude ".git" --exclude "*.log" \
-	  --exclude "Makefile" --exclude "README*" \
-	  --exclude "*.spec" --exclude "build" \
+	  --exclude ".git" --exclude ".gitignore" \
+	  --exclude "sdist" --exclude "build" \
 	  ./
 
 prep_rpmbuild: sdist
