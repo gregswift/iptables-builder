@@ -14,7 +14,7 @@ clean:
 
 install: 
 	mkdir -p ${DESTDIR}/etc/${PACKAGE}/{available,enabled}.d
-	install -m 755 ${PACKAGE} ${DESTDIR}/usr/bin/${PACKAGE}
+	install -m 755 scripts/${PACKAGE} ${DESTDIR}/usr/bin/${PACKAGE}
 	install -m 644 config ${DESTDIR}/etc/${PACKAGE}/config
 
 install_rpms: rpms 
