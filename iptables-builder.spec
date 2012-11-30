@@ -23,8 +23,8 @@ from them.
 %setup -q -n %{name}
 
 %build
-mkdir -p {%buildroot}%{_bindir}
-mkdir -p {%buildroot}%{_sysconfdir}
+mkdir -p %{buildroot}%{_bindir}
+mkdir -p %{buildroot}%{_sysconfdir}
 
 %install
 make DESTDIR=%{buildroot} sysconfdir=%{_sysconfdir} exec_prefix=%{_exec_prefix} install
