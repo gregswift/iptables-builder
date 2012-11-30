@@ -1,0 +1,26 @@
+iptables-builder README
+===============
+
+Simple wrapper script that helps generate iptables configuration
+
+Copyright © 2012 Greg Swift
+Written by: Greg Swift <greg.swift@nytefyre.net>
+License: General Public License (GPL) v3
+
+Description
+===============
+
+To help ease configuration management of iptables this script will read
+ordered files from a directory and compile the system's iptables configuration
+from them.
+
+Usage
+===============
+
+* To build /etc/sysconfig/iptables from enabled rules:
+     # iptables-builder
+
+How to report bugs
+===============
+Visit http://github.com/gregswift/iptables-builder/issues
+

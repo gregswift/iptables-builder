@@ -1,0 +1,87 @@
+#!/usr/bin/python
+
+import os
+import sys
+from optparse import OptionParser
+try:
+    import configparser
+except:
+    import ConfigParser as configparser
+
+CONFIG = '/etc/iptables-builder.conf'
+DEFAULTS = {
+    'output': '/etc/sysconfig/iptables',
+    'basepath': '/etc/iptables-rules/'
+}
+DEFAULTS['availablepath'] = os.path.join(DEFAULTS['basepath'], 'available.d/')
+DEFAULTS['enabledpath'] = os.path.join(DEFAULTS['basepath'], 'enabled.d/')
+
+def gatherRulesFromSourceDir(directory):
+    rules = {}
+    for rule in os.listdir(directory):
+        rule = os.path.join(directory, rule)
+        rules[rule] = (x.strip() for x in open(rule,'r').readlines())
+    return rules
+
+def compileRules(rules):
+    order = rules.keys()
+    order.sort()
+    output = []
+    for ruleset in order:
+        for rule in rules[ruleset]:
+            output.append(rule)
+    return "\n".join(output)
+
+def saveRules(target, rules):
+    open(target, 'w').write(rules)
+
+def main(target, rulesdir, raw):
+    try:
+        rules = compileRules(gatherRulesFromSourceDir(rulesdir))
+    except OSError, e:
+        errorOut('Unable to access source rules', 255)
+    if raw:
+        print rules
+    else:
+        try:
+            saveRules(target, rules)
+        except:
+            errorOut('Unable to access output file %s\n' % target, 1)
+    return
+
+def errorOut(msg, code):
+    sys.stderr.write(msg)
+    sys.exit(code)
+
+def getConfig(source, defaults):
+    config = configparser.SafeConfigParser(defaults)
+    config.read(source)
+    output = config.get('main','output')
+    basepath = config.get('sources','basepath')
+    enabledpath = config.get('sources','enabledpath')
+    availablepath = config.get('sources','availablepath')
+    return (output, basepath, enabledpath, availablepath)
+
+if __name__ == '__main__':
+    parser = OptionParser(usage='Usage: %s [-o filename|--raw]')
+    parser.add_option('-c', '--config', action="store", default=CONFIG,
+            help='Specify alternative configuration file'),
+    parser.add_option('-o', '--output', action="store", default=None,
+            help='Specify alternative output location'),
+    parser.add_option('-r', '--rules-dir', action="store", default=None,
+            help='Specify alternative output location'),
+    parser.add_option('--raw', action="store_true", default=False,
+            help='Print output rather than save it to output file'),
+    options, args = parser.parse_args()
+    try:
+        (output, basepath, enabledpath, availablepath) = getConfig(options.config, DEFAULTS)
+    except configparser.Error:
+        output = DEFAULTS['output']
+        basepath = DEFAULTS['basepath']
+        enabledpath = DEFAULTS['enabledpath']
+        availablepath = DEFAULTS['availablepath']
+    if options.output is not None:
+        output = options.output
+    if options.rules_dir is not None:
+        enabledpath = options.rules_dir
+    main(output, enabledpath, options.raw)

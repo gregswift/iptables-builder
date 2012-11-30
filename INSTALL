@@ -1,0 +1,26 @@
+iptables-builder
+===============
+
+Requirements
+===============
+
+* Python modules:
+- os
+- sys
+- configparser (or ConfigParser)
+- optparse
+* iptables
+
+Installation
+===============
+
+### Manual
+1: copy included iptables-builder script to '/usr/local/bin'
+2: chmod +x /usr/local/bin/keploy
+
+### Python setup tools
+1: python setup.py install
+
+How to report bugs
+===============
+Visit http://github.com/gregswift/iptables-builder/issues
