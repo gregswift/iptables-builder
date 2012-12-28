@@ -11,7 +11,7 @@ except:
 DEFAULTS = {
     'data'    : '/etc/sysconfig/iptables',
     'basepath': '/etc/iptables-builder/',
-    'intput'  : 'INPUT',
+    'input'   : 'INPUT',
     'output'  : 'OUTPUT',
     'forward' : 'FORWARD',
 }
